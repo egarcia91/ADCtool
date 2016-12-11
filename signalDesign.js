@@ -8,11 +8,13 @@
 (function(){
 	function SignalDesign(div,config){
 		HtmlWidget.call(this,div,config);
+		this.drawEditor();
 	}
 
 	SignalDesign.prototype = Object.create(HtmlWidget.prototype);
 	SignalDesign.prototype.constructor = "SignalDesign";
 	SignalDesign.prototype.funcionFFT = [];
+	SignalDesign.prototype.elementPartesFuncion = undefined;
 
 	SignalDesign.prototype.thisChange = function(event,t,that){
 		var name = t.getAttribute('data-name');
@@ -30,29 +32,40 @@
 	SignalDesign.prototype.thisClick = function(event,t,that){
 		var evt = t.getAttribute('data-evt');
 		switch(evt){
-			case "frec-amp":
-				this.botonFrecAmp(t);
-				return true;
-			case "reset":
-				this.emit("reset");
+//			case "frec-amp":
+//				this.botonFrecAmp(t);
+//				return true;
+//			case "reset":
+//				this.emit("reset");
+//				return true;
+//				break;
+//			case "invfase":
+//				this.emit("invfase");
+//				return true;
+//				break;
+//			case "allfrec":
+//				this.emit("allfrec");
+//				return true;
+//				break;
+//			case "show":
+//				this.hide(false);
+//				return true;
+//				break;
+//			case "calculateSignal":
+//				this.calculateSignal();
+//				return true;
+//				break;
+
+			case "agregar":
+				this.agregarParteFuncion();
 				return true;
 				break;
-			case "invfase":
-				this.emit("invfase");
+
+			case "quitar":
+				this.quitarParteFuncion();
 				return true;
 				break;
-			case "allfrec":
-				this.emit("allfrec");
-				return true;
-				break;
-			case "show":
-				this.hide(false);
-				return true;
-				break;
-			case "calculateSignal":
-				this.calculateSignal();
-				return true;
-				break;
+
 			default:
 				return true;
 				break;
@@ -60,144 +73,18 @@
 	};
 
 	SignalDesign.prototype.drawEditor = function(){
+
 		var template = document.createElement("div");
 		template.setAttribute("class","DivSignalDesignTemplate");
-		var ciclos = document.createElement("div");
-		var spanCiclos = document.createElement("span")
-		spanCiclos.innerHTML = "Ciclos";
-		var inputCiclos = document.createElement("input");
-		inputCiclos.setAttribute("type","number");
-		inputCiclos.setAttribute("class","SignalDesignInfo");
-		inputCiclos.setAttribute("data-name","nF");
-		inputCiclos.setAttribute("value","150");
-		inputCiclos.setAttribute("min","1");
-		inputCiclos.setAttribute("max","600");
-		ciclos.appendChild(spanCiclos);
-		ciclos.appendChild(inputCiclos);
-		template.appendChild(ciclos);
-		var periodo = document.createElement("div");
-		var spanPeriodo = document.createElement("span")
-		spanPeriodo.innerHTML = "Periodo";
-		var inputPeriodo = document.createElement("input");
-		inputPeriodo.setAttribute("type","number");
-		inputPeriodo.setAttribute("class","SignalDesignInfo");
-		inputPeriodo.setAttribute("data-name","periodo");
-		inputPeriodo.setAttribute("value","10");
-		inputPeriodo.setAttribute("min","1");
-		inputPeriodo.setAttribute("max","10");
-		periodo.appendChild(spanPeriodo);
-		periodo.appendChild(inputPeriodo);
-		template.appendChild(periodo);
-		var funcion = document.createElement("div");
-		var spanFuncion = document.createElement("span")
-		spanFuncion.innerHTML = "Funci\u00f3n";
-		var span1Desde = document.createElement("span")
-		var span2Desde = document.createElement("span")
-		var span3Desde = document.createElement("span")
-		span1Desde.innerHTML = "Desde";
-		span2Desde.innerHTML = "Desde";
-		span3Desde.innerHTML = "Desde";
-		var span1Hasta = document.createElement("span")
-		var span2Hasta = document.createElement("span")
-		var span3Hasta = document.createElement("span")
-		span1Hasta.innerHTML = "Hasta";
-		span2Hasta.innerHTML = "Hasta";
-		span3Hasta.innerHTML = "Hasta";
-		var div1Funcion = document.createElement("div")
-		var div2Funcion = document.createElement("div")
-		var div3Funcion = document.createElement("div")
-		var inputdiv11Funcion = document.createElement("input");
-		inputdiv11Funcion.setAttribute("type","text");
-		inputdiv11Funcion.setAttribute("class","SignalDesignInfo");
-		inputdiv11Funcion.setAttribute("data-name","funcion");
-		inputdiv11Funcion.setAttribute("data-part","0");
-		inputdiv11Funcion.setAttribute("value","(2/5)x");
-		div1Funcion.appendChild(inputdiv11Funcion);
-		div1Funcion.appendChild(span1Desde);
-		var inputdiv12Funcion = document.createElement("input");
-		inputdiv12Funcion.setAttribute("type","number");
-		inputdiv12Funcion.setAttribute("class","SignalDesignInfo");
-		inputdiv12Funcion.setAttribute("data-name","desde");
-		inputdiv12Funcion.setAttribute("data-part","0");
-		inputdiv12Funcion.setAttribute("value","0");
-		inputdiv12Funcion.setAttribute("min","0");
-		inputdiv12Funcion.setAttribute("max","30");
-		inputdiv12Funcion.setAttribute("step","any");
-		div1Funcion.appendChild(inputdiv12Funcion);
-		div1Funcion.appendChild(span1Hasta);
-		var inputdiv13Funcion = document.createElement("input");
-		inputdiv13Funcion.setAttribute("type","number");
-		inputdiv13Funcion.setAttribute("class","SignalDesignInfo");
-		inputdiv13Funcion.setAttribute("data-name","hasta");
-		inputdiv13Funcion.setAttribute("data-part","0");
-		inputdiv13Funcion.setAttribute("value","2.5");
-		inputdiv13Funcion.setAttribute("min","0");
-		inputdiv13Funcion.setAttribute("max","30");
-		inputdiv13Funcion.setAttribute("step","any");
-		div1Funcion.appendChild(inputdiv13Funcion);
-		var inputdiv21Funcion = document.createElement("input");
-		inputdiv21Funcion.setAttribute("type","text");
-		inputdiv21Funcion.setAttribute("class","SignalDesignInfo");
-		inputdiv21Funcion.setAttribute("data-name","funcion");
-		inputdiv21Funcion.setAttribute("data-part","1");
-		inputdiv21Funcion.setAttribute("value","2-(2/5)x");
-		div2Funcion.appendChild(inputdiv21Funcion);
-		div2Funcion.appendChild(span2Desde);
-		var inputdiv22Funcion = document.createElement("input");
-		inputdiv22Funcion.setAttribute("type","number");
-		inputdiv22Funcion.setAttribute("class","SignalDesignInfo");
-		inputdiv22Funcion.setAttribute("data-name","desde");
-		inputdiv22Funcion.setAttribute("data-part","1");
-		inputdiv22Funcion.setAttribute("value","2.5");
-		inputdiv22Funcion.setAttribute("min","0");
-		inputdiv22Funcion.setAttribute("max","30");
-		inputdiv22Funcion.setAttribute("step","any");
-		div2Funcion.appendChild(inputdiv22Funcion);
-		div2Funcion.appendChild(span2Hasta);
-		var inputdiv23Funcion = document.createElement("input");
-		inputdiv23Funcion.setAttribute("type","number");
-		inputdiv23Funcion.setAttribute("class","SignalDesignInfo");
-		inputdiv23Funcion.setAttribute("data-name","hasta");
-		inputdiv23Funcion.setAttribute("data-part","1");
-		inputdiv23Funcion.setAttribute("value","5");
-		inputdiv23Funcion.setAttribute("min","0");
-		inputdiv23Funcion.setAttribute("max","30");
-		inputdiv23Funcion.setAttribute("step","any");
-		div2Funcion.appendChild(inputdiv23Funcion);
-		var inputdiv31Funcion = document.createElement("input");
-		inputdiv31Funcion.setAttribute("type","text");
-		inputdiv31Funcion.setAttribute("class","SignalDesignInfo");
-		inputdiv31Funcion.setAttribute("data-name","funcion");
-		inputdiv31Funcion.setAttribute("data-part","2");
-		inputdiv31Funcion.setAttribute("value","-1");
-		div3Funcion.appendChild(inputdiv31Funcion);
-		div3Funcion.appendChild(span3Desde);
-		var inputdiv32Funcion = document.createElement("input");
-		inputdiv32Funcion.setAttribute("type","number");
-		inputdiv32Funcion.setAttribute("class","SignalDesignInfo");
-		inputdiv32Funcion.setAttribute("data-name","desde");
-		inputdiv32Funcion.setAttribute("data-part","2");
-		inputdiv32Funcion.setAttribute("value","6.25");
-		inputdiv32Funcion.setAttribute("min","0");
-		inputdiv32Funcion.setAttribute("max","30");
-		inputdiv32Funcion.setAttribute("step","any");
-		div3Funcion.appendChild(inputdiv32Funcion);
-		div3Funcion.appendChild(span3Hasta);
-		var inputdiv33Funcion = document.createElement("input");
-		inputdiv33Funcion.setAttribute("type","number");
-		inputdiv33Funcion.setAttribute("class","SignalDesignInfo");
-		inputdiv33Funcion.setAttribute("data-name","hasta");
-		inputdiv33Funcion.setAttribute("data-part","2");
-		inputdiv33Funcion.setAttribute("value","8.75");
-		inputdiv33Funcion.setAttribute("min","0");
-		inputdiv33Funcion.setAttribute("max","30");
-		inputdiv33Funcion.setAttribute("step","any");
-		div3Funcion.appendChild(inputdiv33Funcion);
-		funcion.appendChild(spanFuncion);
-		funcion.appendChild(div1Funcion);
-		funcion.appendChild(div2Funcion);
-		funcion.appendChild(div3Funcion);
-		template.appendChild(funcion);
+
+		template.appendChild(this.ciclosFila());
+
+		template.appendChild(this.periodoFila());
+
+		template.appendChild(this.funcionFila());
+
+		template.appendChild(this.botonesFila());
+
 		this.d.appendChild(template);
 	};
 
@@ -335,6 +222,145 @@
 			}
 		}
 		return data;
+	};
+
+
+	SignalDesign.prototype.ciclosFila = function(){
+
+		var ciclos = document.createElement("div");
+
+		var spanCiclos = document.createElement("span");
+
+		spanCiclos.innerHTML = "Cantidad de Ciclos del Analisis Fourier";
+
+		var inputCiclos = document.createElement("input");
+
+		inputCiclos.setAttribute("type","number");
+		inputCiclos.setAttribute("class","SignalDesignInfo");
+		inputCiclos.setAttribute("data-name","nF");
+		inputCiclos.setAttribute("value","150");
+		inputCiclos.setAttribute("min","1");
+		inputCiclos.setAttribute("max","600");
+
+		ciclos.appendChild(spanCiclos);
+		ciclos.appendChild(inputCiclos);
+
+		return ciclos;
+	};
+
+	SignalDesign.prototype.periodoFila = function(){
+		var periodo = document.createElement("div");
+
+		var spanPeriodo = document.createElement("span");
+
+		spanPeriodo.innerHTML = "Periodo";
+
+		var inputPeriodo = document.createElement("input");
+
+		inputPeriodo.setAttribute("type","number");
+		inputPeriodo.setAttribute("class","SignalDesignInfo");
+		inputPeriodo.setAttribute("data-name","periodo");
+		inputPeriodo.setAttribute("value","10");
+		inputPeriodo.setAttribute("min","1");
+		inputPeriodo.setAttribute("max","10");
+
+		periodo.appendChild(spanPeriodo);
+		periodo.appendChild(inputPeriodo);
+
+		return periodo;
+	};
+
+	SignalDesign.prototype.parteFuncion = function(func, desde, hasta){
+		var span1Desde = document.createElement("span")
+		span1Desde.innerHTML = "Desde";
+		var span1Hasta = document.createElement("span")
+		span1Hasta.innerHTML = "Hasta";
+
+		var div1Funcion = document.createElement("div")
+
+		var inputdiv11Funcion = document.createElement("input");
+		inputdiv11Funcion.setAttribute("type","text");
+		inputdiv11Funcion.setAttribute("class","SignalDesignInfo");
+		inputdiv11Funcion.setAttribute("data-name","funcion");
+		inputdiv11Funcion.setAttribute("data-part","0");
+		inputdiv11Funcion.setAttribute("value",func);
+		div1Funcion.appendChild(inputdiv11Funcion);
+		div1Funcion.appendChild(span1Desde);
+
+		var inputdiv12Funcion = document.createElement("input");
+		inputdiv12Funcion.setAttribute("type","number");
+		inputdiv12Funcion.setAttribute("class","SignalDesignInfo");
+		inputdiv12Funcion.setAttribute("data-name","desde");
+		inputdiv12Funcion.setAttribute("data-part","0");
+		inputdiv12Funcion.setAttribute("value",desde);
+		inputdiv12Funcion.setAttribute("min","0");
+		inputdiv12Funcion.setAttribute("max","30");
+		inputdiv12Funcion.setAttribute("step","any");
+		div1Funcion.appendChild(inputdiv12Funcion);
+		div1Funcion.appendChild(span1Hasta);
+
+		var inputdiv13Funcion = document.createElement("input");
+		inputdiv13Funcion.setAttribute("type","number");
+		inputdiv13Funcion.setAttribute("class","SignalDesignInfo");
+		inputdiv13Funcion.setAttribute("data-name","hasta");
+		inputdiv13Funcion.setAttribute("data-part","0");
+		inputdiv13Funcion.setAttribute("value",hasta);
+		inputdiv13Funcion.setAttribute("min","0");
+		inputdiv13Funcion.setAttribute("max","30");
+		inputdiv13Funcion.setAttribute("step","any");
+
+		div1Funcion.appendChild(inputdiv13Funcion);
+
+		return div1Funcion;
+	};
+
+	SignalDesign.prototype.botonesFila = function(){
+		var botones = document.createElement("div");
+		var agregar = document.createElement("input");
+		agregar.type = "button";
+		agregar.value = "Agregar Parte";
+		agregar.setAttribute("data-evt","agregar");
+
+		var quitar = document.createElement("input");
+		quitar.type = "button";
+		quitar.value = "Quitar Parte";
+		quitar.setAttribute("data-evt","quitar");
+
+		botones.appendChild(agregar);
+		botones.appendChild(quitar);
+
+		return botones;
+	};
+
+	SignalDesign.prototype.agregarParteFuncion = function(){
+		if(!this.elementPartesFuncion) return;
+		this.elementPartesFuncion.appendChild(this.parteFuncion("0","0","0"));
+	};
+
+	SignalDesign.prototype.quitarParteFuncion = function(){
+		if(!this.elementPartesFuncion) return;
+		if(!this.elementPartesFuncion.lastChild) return;
+		this.elementPartesFuncion.removeChild(this.elementPartesFuncion.lastChild);
+	};
+
+	SignalDesign.prototype.funcionFila = function(){
+
+		var funcion = document.createElement("div");
+		var spanFuncion = document.createElement("span")
+		spanFuncion.innerHTML = "Funci\u00f3n";
+
+		funcion.appendChild(spanFuncion);
+		var partesFuncion = document.createElement("div");
+		//TODO desharcodear
+		partesFuncion.appendChild(this.parteFuncion("(2/5)x","0","2.5"));
+		partesFuncion.appendChild(this.parteFuncion("2-(2/5)x","2.5","5"));
+		partesFuncion.appendChild(this.parteFuncion("-1","6.25","8.75"));
+
+		funcion.appendChild(partesFuncion);
+
+		this.elementPartesFuncion = partesFuncion;
+
+		return funcion;
 	};
 
 

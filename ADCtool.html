@@ -39,9 +39,22 @@
 	<script src="frecDraw.js"></script>
 	<script src="fourierAnalisis.js"></script>
 	<script>
+
+		signal = [];
+		filtro = [];
+		circuito = [];
+
+		confGeneral = {
+			h : 0.1,
+			hDV : 0.009765625,
+			fin : 10,
+			t : 0
+		}
+
 		window.addEventListener('load', function(){
 			PEPE = new Main(document.getElementById('main'));
 		});
+
 	</script>
 </html>
 

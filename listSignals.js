@@ -2,6 +2,8 @@
 	function ListSignals(div,config){
 		HtmlWidget.call(this,div,config);
 		this._cValue("signals",[]);
+
+		this.drawTable();
 	}
 
 	ListSignals.prototype = Object.create(HtmlWidget.prototype);
@@ -10,31 +12,49 @@
 	ListSignals.prototype.thisClick = function(event,t,that){
 		var evt = t.getAttribute('data-evt');
 		switch(evt){
-			case "idealSignal":
-				t.style = "display:none";
-				this.emit("idealSignal",t.getAttribute("data-name"));
-				return true;
-				break;
+//			case "idealSignal":
+//				t.style = "display:none";
+//				this.emit("idealSignal",t.getAttribute("data-name"));
+//				return true;
+//				break;
 			case "newSignal":
+				console.log("HOLA");
+				//this.SigDesign.addEventListener("creSignal",this.onCalc.bind(this));
+
 				this.clean();
 				this.getElementsByClassName("tables")[0].appendChild(this.drawHeader());
 				this.getElementsByClassName("tables")[0].appendChild(this.drawEditHeader());
-				this.emit("newSignal");
+
+				this.SigDesign = new SignalDesign(this.getElementsByClassName("editor")[0]);
+				this.SigDesign.addEventListener("creSignal",this.onCalc.bind(this));
+
+//				this.emit("newSignal");
 				return true;
 				break;
-			case "calculateSignal":
-				this.emit("createSignal",this.getElementsByClassName("SignalDesignInfo")[0].value);
-				return true;
-				break;
-			case "viewSignal":
-				this.emit("viewSignal",t.getAttribute("data-name"));
-				return true;
-				break;
+//			case "calculateSignal":
+//				this.emit("createSignal",this.getElementsByClassName("SignalDesignInfo")[0].value);
+//				return true;
+//				break;
+//			case "viewSignal":
+//				this.emit("viewSignal",t.getAttribute("data-name"));
+//				return true;
+//				break;
 			default:
 				return true;
 				break;
 		}
 	};
+
+	ListSignals.prototype.onCalc = function(data){
+		var index = this.Signal.push(new Signal(null,data));
+//		this.Signal[index-1].getDiscretValues(this.confGeneral);
+//		this.Signal[index-1].calcFFT();
+//		this.Signal[index-1].getValues(this.confGeneral);
+////		this.Signal[index-1].calcAnBn();
+////		this.Signal[index-1].frecAmp();
+//		this.listSignals();
+	};
+
 
 	ListSignals.prototype.readyToDraw = function(i){
 		this.clean();
@@ -129,49 +149,70 @@
 		})
 	};
 
+	ListSignals.prototype.tableTemplateHead = function(){
+
+		var tr = document.createElement('tr');
+
+		var td1 = document.createElement('th');
+		var td2 = document.createElement('th');
+		var td3 = document.createElement('th');
+
+		td3.setAttribute("style","text-align:right");
+		var text1 = document.createTextNode('Nombre');
+		var text2 = document.createTextNode('Periodo');
+		var input = document.createElement('input');
+
+		input.setAttribute("data-evt","newSignal");
+		input.setAttribute("type","button");
+		input.setAttribute("value","Crear Nuevo");
+
+		td1.appendChild(text1);
+		td2.appendChild(text2);
+		td3.appendChild(input);
+
+		tr.appendChild(td1);
+		tr.appendChild(td2);
+		tr.appendChild(td3);
+
+		return tr;
+	};
+
+	ListSignals.prototype.tableTemplateBody = function(signal){
+		var tr = document.createElement('tr');
+
+		var td1 = document.createElement('td');
+		var td2 = document.createElement('td');
+		var td3 = document.createElement('td');
+
+		var text1 = document.createTextNode(signal.nombre);
+		var text2 = document.createTextNode(signal.periodo);
+		var input = document.createElement('input');
+
+		input.setAttribute("data-evt","viewSignal");
+		input.setAttribute("data-name",i);
+		input.setAttribute("type","button");
+		input.setAttribute("value","Ver");
+
+		td1.appendChild(text1);
+		td2.appendChild(text2);
+		td3.appendChild(input);
+
+		tr.appendChild(td1);
+		tr.appendChild(td2);
+		tr.appendChild(td3);
+
+		return tr;
+	};
+
 	ListSignals.prototype.drawTable = function(signals){
 		this.c.signals = signals || this.c.signals;
 		this.clean();
 		var header = this.drawHeader();
 		var table = document.createElement('table');
-		var tr = document.createElement('tr');
-		var td1 = document.createElement('th');
-		var td2 = document.createElement('th');
-		var td3 = document.createElement('th');
-		td3.setAttribute("style","text-align:right");
-		var text1 = document.createTextNode('Nombre');
-		var text2 = document.createTextNode('Periodo');
-		var input = document.createElement('input');
-		input.setAttribute("data-evt","newSignal");
-		input.setAttribute("type","button");
-		input.setAttribute("value","Crear Nuevo");
-		td1.appendChild(text1);
-		td2.appendChild(text2);
-		td3.appendChild(input);
-		tr.appendChild(td1);
-		tr.appendChild(td2);
-		tr.appendChild(td3);
-		table.appendChild(tr);
+		table.appendChild(this.tableTemplateHead());
 
-		for (var i = 0, signal; signal = this.c.signals[i]; i++){
-			var tr = document.createElement('tr');
-			var td1 = document.createElement('td');
-			var td2 = document.createElement('td');
-			var td3 = document.createElement('td');
-			var text1 = document.createTextNode(signal.nombre);
-			var text2 = document.createTextNode(signal.periodo);
-			var input = document.createElement('input');
-			input.setAttribute("data-evt","viewSignal");
-			input.setAttribute("data-name",i);
-			input.setAttribute("type","button");
-			input.setAttribute("value","Ver");
-			td1.appendChild(text1);
-			td2.appendChild(text2);
-			td3.appendChild(input);
-			tr.appendChild(td1);
-			tr.appendChild(td2);
-			tr.appendChild(td3);
-			table.appendChild(tr);
+		for(var i = 0, signal; signal = this.c.signals[i]; i++){
+			table.appendChild(this.tableTemplateBody(signal));
 		}
 
 		this.getElementsByClassName("tables")[0].appendChild(header);

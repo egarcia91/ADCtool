@@ -7,36 +7,36 @@
 		this.Marco.addEventListener("circuits",this.listCircuits.bind(this));
 		this.Marco.addEventListener("signals",this.listSignals.bind(this));
 
-		this.h = 0.1,
-		this.hDV = 0.009765625,
-		this.fin = 10,
-		this.t = 0;
-
-		this.confGeneral = {
-			h : this.h,
-			hDV : this.hDV,
-			fin : this.fin,
-			init : this.t
-		};
+//		this.h = 0.1,
+//		this.hDV = 0.009765625,
+//		this.fin = 10,
+//		this.t = 0;
+//
+//		this.confGeneral = {
+//			h : this.h,
+//			hDV : this.hDV,
+//			fin : this.fin,
+//			init : this.t
+//		};
 	}
 
 	Main.prototype = Object.create(HtmlWidget.prototype);
 	Main.prototype.constructor = "Main";
-	Main.prototype.Signal = [];
+//	Main.prototype.Signal = [];
 	Main.prototype.Filtro = [];
 	Main.prototype.Circuito = [];
 
 	Main.prototype.listSignals = function(){
-		if(typeof(this.ListSignals) != "object"){
+//		if(typeof(this.ListSignals) != "object"){
 			this.ListSignals = new ListSignals(this.getElementsByClassName("content")[0],{
-				signals : this.Signal
+				signals : signal
 			});
-			this.ListSignals.addEventListener("newSignal",this.newSignal.bind(this));
-			this.ListSignals.addEventListener("viewSignal",this.viewSignal.bind(this));
-			this.ListSignals.addEventListener("idealSignal",this.idealSignal.bind(this));
-			this.ListSignals.addEventListener("createSignal",this.createSignal.bind(this));
-		}
-		this.ListSignals.drawTable(this.Signal);
+//			this.ListSignals.addEventListener("newSignal",this.newSignal.bind(this));
+//			this.ListSignals.addEventListener("viewSignal",this.viewSignal.bind(this));
+//			this.ListSignals.addEventListener("idealSignal",this.idealSignal.bind(this));
+//			this.ListSignals.addEventListener("createSignal",this.createSignal.bind(this));
+//		}
+//		this.ListSignals.drawTable(this.Signal);
 	};
 
 	Main.prototype.listCircuits = function(){
@@ -110,13 +110,13 @@
 		this.SigDesign.calculateSignal(nombre);
 	};
 
-	Main.prototype.newSignal = function(){
-		if(typeof(this.SigDesign) != "object"){
-			this.SigDesign = new SignalDesign(this.getElementsByClassName("editor")[0]);
-			this.SigDesign.addEventListener("creSignal",this.onCalc.bind(this));
-		}
-		this.SigDesign.drawEditor();
-	};
+//	Main.prototype.newSignal = function(){
+//		if(typeof(this.SigDesign) != "object"){
+//			this.SigDesign = new SignalDesign(this.getElementsByClassName("editor")[0]);
+//			this.SigDesign.addEventListener("creSignal",this.onCalc.bind(this));
+//		}
+//		this.SigDesign.drawEditor();
+//	};
 
 	Main.prototype.idealSignal = function(i){
 		var index = this.Signal.push(new Signal(null,this.Signal[i].exportSignal()));
