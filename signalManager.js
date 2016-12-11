@@ -1,15 +1,15 @@
 (function(){
-	function ListSignals(div,config){
+	function SignalManager(div,config){
 		HtmlWidget.call(this,div,config);
 		this._cValue("signals",[]);
 
 		this.drawTable();
 	}
 
-	ListSignals.prototype = Object.create(HtmlWidget.prototype);
-	ListSignals.prototype.constructor = "ListSignals";
+	SignalManager.prototype = Object.create(HtmlWidget.prototype);
+	SignalManager.prototype.constructor = "SignalManager";
 
-	ListSignals.prototype.thisClick = function(event,t,that){
+	SignalManager.prototype.thisClick = function(event,t,that){
 		var evt = t.getAttribute('data-evt');
 		switch(evt){
 //			case "idealSignal":
@@ -45,7 +45,7 @@
 		}
 	};
 
-	ListSignals.prototype.onCalc = function(data){
+	SignalManager.prototype.onCalc = function(data){
 		var index = this.Signal.push(new Signal(null,data));
 //		this.Signal[index-1].getDiscretValues(this.confGeneral);
 //		this.Signal[index-1].calcFFT();
@@ -56,7 +56,7 @@
 	};
 
 
-	ListSignals.prototype.readyToDraw = function(i){
+	SignalManager.prototype.readyToDraw = function(i){
 		this.clean();
 		var header = this.drawHeader();
 		var table = document.createElement('table');
@@ -101,7 +101,7 @@
 		this.getElementsByClassName("editor")[0].appendChild(canvasFFTOut);
 	};
 
-	ListSignals.prototype.drawEditHeader = function(){
+	SignalManager.prototype.drawEditHeader = function(){
 		var table = document.createElement('table');
 		var tr = document.createElement('tr');
 		var td1 = document.createElement('th');
@@ -127,7 +127,7 @@
 		return table;
 	};
 	
-	ListSignals.prototype.drawHeader = function(){
+	SignalManager.prototype.drawHeader = function(){
 		var header = document.createElement('div');
 		var headerimg = document.createElement('div');
 		headerimg.setAttribute("class","signals");
@@ -140,7 +140,7 @@
 		return header;
 	};
 
-	ListSignals.prototype.clean = function(){
+	SignalManager.prototype.clean = function(){
 		this.getElementsByClassName("tables",function(e){
 			e.innerHTML = "";
 		})
@@ -149,7 +149,7 @@
 		})
 	};
 
-	ListSignals.prototype.tableTemplateHead = function(){
+	SignalManager.prototype.tableTemplateHead = function(){
 
 		var tr = document.createElement('tr');
 
@@ -177,7 +177,7 @@
 		return tr;
 	};
 
-	ListSignals.prototype.tableTemplateBody = function(signal){
+	SignalManager.prototype.tableTemplateBody = function(signal){
 		var tr = document.createElement('tr');
 
 		var td1 = document.createElement('td');
@@ -204,7 +204,7 @@
 		return tr;
 	};
 
-	ListSignals.prototype.drawTable = function(signals){
+	SignalManager.prototype.drawTable = function(signals){
 		this.c.signals = signals || this.c.signals;
 		this.clean();
 		var header = this.drawHeader();
@@ -219,6 +219,6 @@
 		this.getElementsByClassName("tables")[0].appendChild(table);
 	};
 
-	window.ListSignals = ListSignals;
+	window.SignalManager = SignalManager;
 })();
 

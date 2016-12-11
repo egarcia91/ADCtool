@@ -27,16 +27,16 @@
 	Main.prototype.Circuito = [];
 
 	Main.prototype.listSignals = function(){
-//		if(typeof(this.ListSignals) != "object"){
-			this.ListSignals = new ListSignals(this.getElementsByClassName("content")[0],{
+//		if(typeof(this.SignalManager) != "object"){
+			this.SignalManager = new SignalManager(this.getElementsByClassName("content")[0],{
 				signals : signal
 			});
-//			this.ListSignals.addEventListener("newSignal",this.newSignal.bind(this));
-//			this.ListSignals.addEventListener("viewSignal",this.viewSignal.bind(this));
-//			this.ListSignals.addEventListener("idealSignal",this.idealSignal.bind(this));
-//			this.ListSignals.addEventListener("createSignal",this.createSignal.bind(this));
+//			this.SignalManager.addEventListener("newSignal",this.newSignal.bind(this));
+//			this.SignalManager.addEventListener("viewSignal",this.viewSignal.bind(this));
+//			this.SignalManager.addEventListener("idealSignal",this.idealSignal.bind(this));
+//			this.SignalManager.addEventListener("createSignal",this.createSignal.bind(this));
 //		}
-//		this.ListSignals.drawTable(this.Signal);
+//		this.SignalManager.drawTable(this.Signal);
 	};
 
 	Main.prototype.listCircuits = function(){
@@ -144,7 +144,7 @@
 	};
 
 	Main.prototype.viewSignal = function(i){
-		this.ListSignals.readyToDraw(i);
+		this.SignalManager.readyToDraw(i);
 		this.Signal[i].firstdraw(this.getElementsByClassName("MainCanvasSignal")[0],"red");
 		this.Signal[i].firstdrawFrecDiag(this.getElementsByClassName("MainCanvasInFFT")[0],"red");
 	};
