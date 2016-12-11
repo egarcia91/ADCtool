@@ -1,0 +1,47 @@
+<html>
+	<head>
+		<link rel="stylesheet" type="text/css" href="./style.css">
+	</head>
+	<body>
+	<div id="main">
+			<div class="marco">
+				<div class="circuit"></div>
+				<div class="signals" data-evt="signals" title="Se&ntilde;ales"></div>
+				<div class="filters" data-evt="filters" title="Filtros"></div>
+				<div class="circuits" data-evt="circuits" title="Circuitos"></div>
+			</div>
+			<div class="content">
+				<div class="tables"></div>
+				<div class="editor"></div>
+			</div>
+		</div>
+	</body>
+	<script src="html_widget.js"></script>
+	<script src="math.js"></script>
+	<script src="canvasDraw.js"></script>
+	<script src="dsp.js"></script>
+	<script src="main.js"></script>
+	<script src="marco.js"></script>
+	<script src="listFiltros.js"></script>
+	<script src="filtro.js"></script>
+	<script src="filtroDraw.js"></script>
+	<script src="filtroNotch.js"></script>
+	<script src="filtroPasabanda.js"></script>
+	<script src="filtroPasabajo.js"></script>
+	<script src="filtroPasaalto.js"></script>
+	<script src="editorFiltro.js"></script>
+	<script src="listCircuits.js"></script>
+	<script src="editorCircuito.js"></script>
+	<script src="listSignals.js"></script>
+	<script src="signalDesign.js"></script>
+	<script src="signalDraw.js"></script>
+	<script src="signal.js"></script>
+	<script src="frecDraw.js"></script>
+	<script src="fourierAnalisis.js"></script>
+	<script>
+		window.addEventListener('load', function(){
+			PEPE = new Main(document.getElementById('main'));
+		});
+	</script>
+</html>
+
