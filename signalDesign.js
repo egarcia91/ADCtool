@@ -93,21 +93,24 @@
 			nombre : nombre || "",
 			funcion : {}
 		};
+
 		this.getElementsByClassName("SignalDesignInfo",function(e){
 			var name = e.getAttribute("data-name");
+			var part = e.getAttribute("data-part");
+			var func = data["funcion"][part];
 			switch(name){
 				case "hasta":
 				case "desde":
-					if(!data["funcion"][e.getAttribute('data-part')])
-						data["funcion"][e.getAttribute('data-part')] = {};
-					data["funcion"][e.getAttribute('data-part')][name] = parseFloat(e.value,10);
+					if(!func)
+						func = {};
+					func[name] = parseFloat(e.value,10);
 					break;
 				case "funcion":
-					if(!data["funcion"][e.getAttribute('data-part')])
-						data["funcion"][e.getAttribute('data-part')] = {};
-					if(!data["funcion"][e.getAttribute('data-part')][name]);
-						data["funcion"][e.getAttribute('data-part')][name] = {};
-					data["funcion"][e.getAttribute('data-part')][name] = this.functionParse(e.value);
+					if(!func)
+						func = {};
+					if(!func[name]);
+						func[name] = {};
+					func[name] = this.functionParse(e.value);
 					break;
 				default:
 					data[name] = parseInt(e.value,10);

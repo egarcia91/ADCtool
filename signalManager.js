@@ -12,14 +12,14 @@
 	SignalManager.prototype.thisClick = function(event,t,that){
 		var evt = t.getAttribute('data-evt');
 		switch(evt){
-//			case "idealSignal":
-//				t.style = "display:none";
-//				this.emit("idealSignal",t.getAttribute("data-name"));
-//				return true;
-//				break;
+
+			case "idealSignal":
+				t.style = "display:none";
+				this.idealSignal(t.getAttribute("data-name"));
+				return true;
+				break;
+
 			case "newSignal":
-				console.log("HOLA");
-				//this.SigDesign.addEventListener("creSignal",this.onCalc.bind(this));
 
 				this.clean();
 				this.getElementsByClassName("tables")[0].appendChild(this.drawHeader());
@@ -28,37 +28,86 @@
 				this.SigDesign = new SignalDesign(this.getElementsByClassName("editor")[0]);
 				this.SigDesign.addEventListener("creSignal",this.onCalc.bind(this));
 
-//				this.emit("newSignal");
 				return true;
 				break;
-//			case "calculateSignal":
-//				this.emit("createSignal",this.getElementsByClassName("SignalDesignInfo")[0].value);
-//				return true;
-//				break;
-//			case "viewSignal":
-//				this.emit("viewSignal",t.getAttribute("data-name"));
-//				return true;
-//				break;
+
+			case "calculateSignal":
+
+				var nombre = this.getElementsByClassName("SignalDesignInfo")[0].value;
+				this.SigDesign.calculateSignal(nombre);
+
+				return true;
+				break;
+
+			case "viewSignal":
+				this.viewSignal(t.getAttribute("data-name"));
+				return true;
+				break;
+
 			default:
 				return true;
 				break;
 		}
 	};
 
+	SignalManager.prototype.onSignalInCanvasClick = function(index,i,y,x){
+		this.c.signals[index].frecAddRm(i);
+		this.c.signals[index].getValues(confGeneral);
+		this.c.signals[index].draw(this.getElementsByClassName("MainCanvasSignalOut")[0],"blue");
+		this.c.signals[index].drawFrecDiag(this.getElementsByClassName("MainCanvasOutFFT")[0],"blue");
+	};
+
+	SignalManager.prototype.onSignalOutCanvasClickFase = function(index,i,ang){
+		this.c.signals[index].setFase(i,ang);
+		this.c.signals[index].getValues(confGeneral);
+		this.c.signals[index].draw(this.getElementsByClassName("MainCanvasSignalOut")[0],"blue");
+		this.c.signals[index].drawFrecDiag(this.getElementsByClassName("MainCanvasOutFFT")[0],"blue");
+	};
+
+	SignalManager.prototype.onSignalOutCanvasClick = function(index,i,y,x){
+		this.c.signals[index].ampMultiply(i,y,x);
+		this.c.signals[index].getValues(confGeneral);
+		this.c.signals[index].draw(this.getElementsByClassName("MainCanvasSignalOut")[0],"blue");
+		this.c.signals[index].drawFrecDiag(this.getElementsByClassName("MainCanvasOutFFT")[0],"blue");
+	};
+
+	SignalManager.prototype.idealSignal = function(i){
+		var index = this.c.signals.push(new Signal(null,this.c.signals[i].exportSignal()));
+		this.c.signals[i].addEventListener("clickCanvas", this.onSignalInCanvasClick.bind(this,index-1));
+		this.c.signals[index-1].setNombre(this.c.signals[i].nombre+" salida ideal");
+		this.c.signals[index-1].removeAllFrec();
+		this.c.signals[index-1].getValues(confGeneral);
+		this.c.signals[index-1].firstdraw(this.getElementsByClassName("MainCanvasSignalOut")[0],"blue");
+		this.c.signals[index-1].firstdrawFrecDiag(this.getElementsByClassName("MainCanvasOutFFT")[0],"blue");
+		this.c.signals[index-1].addEventListener("clickCanvas", this.onSignalOutCanvasClick.bind(this,index-1));
+		this.c.signals[index-1].addEventListener("clickCirculoCanvas", this.onSignalOutCanvasClickFase.bind(this,index-1));
+	};
+
+	SignalManager.prototype.viewSignal = function(i){
+		this.readyToDraw(i);
+		this.c.signals[i].firstdraw(this.getElementsByClassName("MainCanvasSignal")[0],"red");
+		this.c.signals[i].firstdrawFrecDiag(this.getElementsByClassName("MainCanvasInFFT")[0],"red");
+	};
+
 	SignalManager.prototype.onCalc = function(data){
-		var index = this.Signal.push(new Signal(null,data));
-//		this.Signal[index-1].getDiscretValues(this.confGeneral);
-//		this.Signal[index-1].calcFFT();
-//		this.Signal[index-1].getValues(this.confGeneral);
-////		this.Signal[index-1].calcAnBn();
-////		this.Signal[index-1].frecAmp();
-//		this.listSignals();
+		var index = this.c.signals.push(new Signal(null,data));
+		this.c.signals[index-1].getDiscretValues(confGeneral);
+		this.c.signals[index-1].calcFFT();
+		this.c.signals[index-1].getValues(confGeneral);
+
+//		this.c.signals[index-1].calcAnBn();
+//		this.c.signals[index-1].frecAmp();
+
+		this.drawTable();
 	};
 
 
 	SignalManager.prototype.readyToDraw = function(i){
+
 		this.clean();
+
 		var header = this.drawHeader();
+
 		var table = document.createElement('table');
 		var tr = document.createElement('tr');
 		var td1 = document.createElement('th');
@@ -67,6 +116,7 @@
 		td3.setAttribute("style","text-align:right");
 		var text1 = document.createTextNode('Nombre');
 		var text2 = document.createTextNode(this.c.signals[i].nombre);
+
 		if(this.c.signals[i].nombre.indexOf("salida ideal") > -1){
 			var input = document.createElement('div');
 		} else {
@@ -76,6 +126,7 @@
 			input.setAttribute("type","button");
 			input.setAttribute("value","Crear Salida Ideal");
 		}
+
 		td1.appendChild(text1);
 		td2.appendChild(text2);
 		td3.appendChild(input);
@@ -177,15 +228,15 @@
 		return tr;
 	};
 
-	SignalManager.prototype.tableTemplateBody = function(signal){
+	SignalManager.prototype.tableTemplateBody = function(sig,i){
 		var tr = document.createElement('tr');
 
 		var td1 = document.createElement('td');
 		var td2 = document.createElement('td');
 		var td3 = document.createElement('td');
 
-		var text1 = document.createTextNode(signal.nombre);
-		var text2 = document.createTextNode(signal.periodo);
+		var text1 = document.createTextNode(sig.nombre);
+		var text2 = document.createTextNode(sig.periodo);
 		var input = document.createElement('input');
 
 		input.setAttribute("data-evt","viewSignal");
@@ -206,13 +257,17 @@
 
 	SignalManager.prototype.drawTable = function(signals){
 		this.c.signals = signals || this.c.signals;
+
 		this.clean();
+
 		var header = this.drawHeader();
+
 		var table = document.createElement('table');
+
 		table.appendChild(this.tableTemplateHead());
 
-		for(var i = 0, signal; signal = this.c.signals[i]; i++){
-			table.appendChild(this.tableTemplateBody(signal));
+		for(var i = 0, sig; sig = this.c.signals[i]; i++){
+			table.appendChild(this.tableTemplateBody(sig,i));
 		}
 
 		this.getElementsByClassName("tables")[0].appendChild(header);

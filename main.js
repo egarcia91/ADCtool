@@ -7,36 +7,17 @@
 		this.Marco.addEventListener("circuits",this.listCircuits.bind(this));
 		this.Marco.addEventListener("signals",this.listSignals.bind(this));
 
-//		this.h = 0.1,
-//		this.hDV = 0.009765625,
-//		this.fin = 10,
-//		this.t = 0;
-//
-//		this.confGeneral = {
-//			h : this.h,
-//			hDV : this.hDV,
-//			fin : this.fin,
-//			init : this.t
-//		};
 	}
 
 	Main.prototype = Object.create(HtmlWidget.prototype);
 	Main.prototype.constructor = "Main";
-//	Main.prototype.Signal = [];
 	Main.prototype.Filtro = [];
 	Main.prototype.Circuito = [];
 
 	Main.prototype.listSignals = function(){
-//		if(typeof(this.SignalManager) != "object"){
-			this.SignalManager = new SignalManager(this.getElementsByClassName("content")[0],{
-				signals : signal
-			});
-//			this.SignalManager.addEventListener("newSignal",this.newSignal.bind(this));
-//			this.SignalManager.addEventListener("viewSignal",this.viewSignal.bind(this));
-//			this.SignalManager.addEventListener("idealSignal",this.idealSignal.bind(this));
-//			this.SignalManager.addEventListener("createSignal",this.createSignal.bind(this));
-//		}
-//		this.SignalManager.drawTable(this.Signal);
+		this.SignalManager = new SignalManager(this.getElementsByClassName("content")[0],{
+			signals : signal
+		});
 	};
 
 	Main.prototype.listCircuits = function(){
@@ -105,31 +86,6 @@
 		this.EdFiltro.drawEditor();
 	};
 
-	Main.prototype.createSignal = function(nombre){
-		if(typeof(this.SigDesign) != "object") return;
-		this.SigDesign.calculateSignal(nombre);
-	};
-
-//	Main.prototype.newSignal = function(){
-//		if(typeof(this.SigDesign) != "object"){
-//			this.SigDesign = new SignalDesign(this.getElementsByClassName("editor")[0]);
-//			this.SigDesign.addEventListener("creSignal",this.onCalc.bind(this));
-//		}
-//		this.SigDesign.drawEditor();
-//	};
-
-	Main.prototype.idealSignal = function(i){
-		var index = this.Signal.push(new Signal(null,this.Signal[i].exportSignal()));
-		this.Signal[i].addEventListener("clickCanvas", this.onSignalInCanvasClick.bind(this,index-1));
-		this.Signal[index-1].setNombre(this.Signal[i].nombre+" salida ideal");
-		this.Signal[index-1].removeAllFrec();
-		this.Signal[index-1].getValues(this.confGeneral);
-		this.Signal[index-1].firstdraw(this.getElementsByClassName("MainCanvasSignalOut")[0],"blue");
-		this.Signal[index-1].firstdrawFrecDiag(this.getElementsByClassName("MainCanvasOutFFT")[0],"blue");
-		this.Signal[index-1].addEventListener("clickCanvas", this.onSignalOutCanvasClick.bind(this,index-1));
-		this.Signal[index-1].addEventListener("clickCirculoCanvas", this.onSignalOutCanvasClickFase.bind(this,index-1));
-	};
-
 	Main.prototype.viewCircuito = function(i){
 		this.ListCircuits.readyToDraw(i);
 		this.Circuito[i].signalIn.firstdraw(this.getElementsByClassName("MainCanvasSignal")[0],"red");
@@ -141,12 +97,6 @@
 	Main.prototype.viewFiltro = function(a){
 		this.ListFiltros.readyToDraw(a);
 		this.Filtro[a].firstdraw(this.getElementsByClassName("MainCanvasBodedB")[0],"red");
-	};
-
-	Main.prototype.viewSignal = function(i){
-		this.SignalManager.readyToDraw(i);
-		this.Signal[i].firstdraw(this.getElementsByClassName("MainCanvasSignal")[0],"red");
-		this.Signal[i].firstdrawFrecDiag(this.getElementsByClassName("MainCanvasInFFT")[0],"red");
 	};
 
 	Main.prototype.onCreateCircuito = function(data){
@@ -186,39 +136,6 @@
 				break;
 		}
 		this.listFilters();
-	};
-
-	Main.prototype.onCalc = function(data){
-		var index = this.Signal.push(new Signal(null,data));
-		this.Signal[index-1].getDiscretValues(this.confGeneral);
-		this.Signal[index-1].calcFFT();
-		this.Signal[index-1].getValues(this.confGeneral);
-//		this.Signal[index-1].calcAnBn();
-//		this.Signal[index-1].frecAmp();
-		this.listSignals();
-	};
-
-	Main.prototype.onSignalOutCanvasClickFase = function(index,i,ang){
-		this.Signal[index].setFase(i,ang);
-		this.Signal[index].getValues(this.confGeneral);
-		this.Signal[index].draw(this.getElementsByClassName("MainCanvasSignalOut")[0],"blue");
-		this.Signal[index].drawFrecDiag(this.getElementsByClassName("MainCanvasOutFFT")[0],"blue");
-	};
-
-	Main.prototype.onSignalOutCanvasClick = function(index,i,y,x){
-		this.Signal[index].ampMultiply(i,y,x);
-		this.Signal[index].getValues(this.confGeneral);
-		this.Signal[index].draw(this.getElementsByClassName("MainCanvasSignalOut")[0],"blue");
-		this.Signal[index].drawFrecDiag(this.getElementsByClassName("MainCanvasOutFFT")[0],"blue");
-	};
-
-
-
-	Main.prototype.onSignalInCanvasClick = function(index,i,y,x){
-		this.Signal[index].frecAddRm(i);
-		this.Signal[index].getValues(this.confGeneral);
-		this.Signal[index].draw(this.getElementsByClassName("MainCanvasSignalOut")[0],"blue");
-		this.Signal[index].drawFrecDiag(this.getElementsByClassName("MainCanvasOutFFT")[0],"blue");
 	};
 
 	window.Main = Main;
