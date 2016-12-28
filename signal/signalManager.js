@@ -3,6 +3,7 @@
 		HtmlWidget.call(this,div,config);
 		this._cValue("signals",[]);
 
+		this.basicDraw();
 		this.drawTable();
 	}
 
@@ -20,14 +21,7 @@
 				break;
 
 			case "newSignal":
-
-				this.clean();
-				this.getElementsByClassName("tables")[0].appendChild(this.drawHeader());
-				this.getElementsByClassName("tables")[0].appendChild(this.drawEditHeader());
-
-				this.SigDesign = new SignalDesign(this.getElementsByClassName("editor")[0]);
-				this.SigDesign.addEventListener("creSignal",this.onCalc.bind(this));
-
+				this.onNewSignalClick();
 				return true;
 				break;
 
@@ -48,6 +42,15 @@
 				return true;
 				break;
 		}
+	};
+
+	SignalManager.prototype.onNewSignalClick = function(){
+		this.clean();
+		this.getElementsByClassName("tables")[0].appendChild(this.drawHeader());
+		this.getElementsByClassName("tables")[0].appendChild(this.drawEditHeader());
+
+		this.SigDesign = new SignalDesign(this.getElementsByClassName("editor")[0]);
+		this.SigDesign.addEventListener("creSignal",this.onCalc.bind(this));
 	};
 
 	SignalManager.prototype.onSignalInCanvasClick = function(index,i,y,x){
@@ -90,13 +93,14 @@
 	};
 
 	SignalManager.prototype.onCalc = function(data){
-		var index = this.c.signals.push(new Signal(null,data));
-		this.c.signals[index-1].getDiscretValues(confGeneral);
-		this.c.signals[index-1].calcFFT();
-		this.c.signals[index-1].getValues(confGeneral);
+		console.log(data);
+//		var index = this.c.signals.push(new Signal(null,data));
+//		this.c.signals[index-1].getDiscretValues(confGeneral);
+//		this.c.signals[index-1].calcFFT();
+//		this.c.signals[index-1].getValues(confGeneral);
 
-//		this.c.signals[index-1].calcAnBn();
-//		this.c.signals[index-1].frecAmp();
+////		this.c.signals[index-1].calcAnBn();
+////		this.c.signals[index-1].frecAmp();
 
 		this.drawTable();
 	};
@@ -272,6 +276,11 @@
 
 		this.getElementsByClassName("tables")[0].appendChild(header);
 		this.getElementsByClassName("tables")[0].appendChild(table);
+	};
+
+	SignalManager.prototype.basicDraw = function(){
+		var template = '<div class="tables"></div><div class="editor"></div>';
+		this.d.innerHTML = template;
 	};
 
 	window.SignalManager = SignalManager;

@@ -148,9 +148,10 @@
 		var fin = confG.fin || 10;
 		var hDV = confG.hDV || 1;
 		this.discretValues = [];
-		for(; t < fin; t = parseFloat((t+=hDV).toFixed(9),10)){
-			this.setDiscretValues(t);
-		}
+		console.log(this.c);
+//		for(; t < fin; t = parseFloat((t+=hDV).toFixed(9),10)){
+//			this.setDiscretValues(t);
+//		}
 	};
 
 	Signal.prototype.calcFFT = function(){

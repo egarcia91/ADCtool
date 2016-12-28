@@ -95,30 +95,30 @@
 		};
 
 		this.getElementsByClassName("SignalDesignInfo",function(e){
-			var name = e.getAttribute("data-name");
-			var part = e.getAttribute("data-part");
-			var func = data["funcion"][part];
-			switch(name){
-				case "hasta":
-				case "desde":
-					if(!func)
-						func = {};
-					func[name] = parseFloat(e.value,10);
-					break;
-				case "funcion":
-					if(!func)
-						func = {};
-					if(!func[name]);
-						func[name] = {};
-					func[name] = this.functionParse(e.value);
-					break;
-				default:
-					data[name] = parseInt(e.value,10);
-					break;
-			}
-			data["funcionFFT"] = this.funcionFFT;
+//			var name = e.getAttribute("data-name");
+//			var part = e.getAttribute("data-part");
+//			var func = data["funcion"][part];
+//			switch(name){
+//				case "hasta":
+//				case "desde":
+//					if(!func)
+//						func = {};
+//					func[name] = parseFloat(e.value,10);
+//					break;
+//				case "funcion":
+//					if(!func)
+//						func = {};
+//					if(!func[name]);
+//						func[name] = {};
+//					func[name] = this.functionParse(e.value);
+//					break;
+//				default:
+//					data[name] = parseInt(e.value,10);
+//					break;
+//			}
+//			data["funcionFFT"] = this.funcionFFT;
 		});
-		this.emit("creSignal",data);
+		//this.emit("creSignal",data);
 	};
 
 	SignalDesign.prototype.hide = function(hide){
