@@ -20,6 +20,7 @@
 		var name = t.getAttribute('data-name');
 		switch(name){
 			case "function":
+				//QUE HACEMOS
 				return true;
 				break;
 			default:
@@ -32,29 +33,11 @@
 	SignalDesign.prototype.thisClick = function(event,t,that){
 		var evt = t.getAttribute('data-evt');
 		switch(evt){
-//			case "frec-amp":
-//				this.botonFrecAmp(t);
-//				return true;
-//			case "reset":
-//				this.emit("reset");
-//				return true;
-//				break;
-//			case "invfase":
-//				this.emit("invfase");
-//				return true;
-//				break;
-//			case "allfrec":
-//				this.emit("allfrec");
-//				return true;
-//				break;
-//			case "show":
-//				this.hide(false);
-//				return true;
-//				break;
-//			case "calculateSignal":
-//				this.calculateSignal();
-//				return true;
-//				break;
+
+			case "calculateSignal":
+				this.calculateSignal();
+				return true;
+				break;
 
 			case "agregar":
 				this.agregarParteFuncion();
@@ -121,111 +104,87 @@
 		//this.emit("creSignal",data);
 	};
 
-	SignalDesign.prototype.hide = function(hide){
-		this.getElementsByClassName("DivShowSignalDesignTemplate",function(e){
-			e.style.display = (hide)? "block" : "none";
-		});
+//	SignalDesign.prototype.resC = function(f){
+//		var res;
+//		if(isNaN(f)){
+//			if(this.isFraction(f)){
+//				res = eval(f);
+//				res = (res == undefined)? 0 : res;
+//			}
+//		} else { 
+//			res = eval(f);
+//			res = (res == undefined)? 0 : res;
+//		}
+//		return res;
+//	};
 
-		this.getElementsByClassName("DivSignalDesignTemplate",function(e){
-			e.style.display = (hide)? "none" : "block";
-		});
-	};
+//	SignalDesign.prototype.isFraction = function(funcion){
+//		funcion = funcion.replace(/\(/g,"");
+//		funcion = funcion.replace(/\)/g,"");
+//		if(funcion.indexOf("/") > 0){
+//			if(isNaN(funcion.split("/")[0])) return false;
+//			if(isNaN(funcion.split("/")[1])) return false;
+//		}
+//		return true;
+//	};
 
-	SignalDesign.prototype.botonFrecAmp = function(t){
-		var type = t.getAttribute("data-name");
-		if(type == "amp"){
-			type = "fase";
-			t.setAttribute("data-name","fase");
-			t.value = "Fase";
-		} else {
-			type = "amp";
-			t.setAttribute("data-name","amp");
-			t.value = "Amplitud";
-		}
-		this.emit("faseamp",type);
-	};
+//	SignalDesign.prototype.functionFraction = function(funcion){
+//		funcion = funcion.replace(/\(/g,"");
+//		funcion = funcion.replace(/\)/g,"");
+//		if(funcion.indexOf("/") > 0)
+//			funcion = parseInt(funcion.split("/")[0],10)/parseInt(funcion.split("/")[1],10);
+//		return funcion;
+//	};
 
-	SignalDesign.prototype.resC = function(f){
-		var res;
-		if(isNaN(f)){
-			if(this.isFraction(f)){
-				res = eval(f);
-				res = (res == undefined)? 0 : res;
-			}
-		} else { 
-			res = eval(f);
-			res = (res == undefined)? 0 : res;
-		}
-		return res;
-	};
+//	SignalDesign.prototype.fftAlgorithm = function(funcion){
+////		console.log(funcion);
+//		var a = math.parse(funcion,{x:0});
+//		var b = a.compile();
+//		this.funcionFFT.push(b);
+////		console.log(b.eval({x:2.5}))
+//		//b.eval({x:1}) //1
+//		//b.eval({x:2}) //4
+//		//b.eval({x:3}) //8
+//	};
 
-	SignalDesign.prototype.isFraction = function(funcion){
-		funcion = funcion.replace(/\(/g,"");
-		funcion = funcion.replace(/\)/g,"");
-		if(funcion.indexOf("/") > 0){
-			if(isNaN(funcion.split("/")[0])) return false;
-			if(isNaN(funcion.split("/")[1])) return false;
-		}
-		return true;
-	};
-
-	SignalDesign.prototype.functionFraction = function(funcion){
-		funcion = funcion.replace(/\(/g,"");
-		funcion = funcion.replace(/\)/g,"");
-		if(funcion.indexOf("/") > 0)
-			funcion = parseInt(funcion.split("/")[0],10)/parseInt(funcion.split("/")[1],10);
-		return funcion;
-	};
-
-	SignalDesign.prototype.fftAlgorithm = function(funcion){
-//		console.log(funcion);
-		var a = math.parse(funcion,{x:0});
-		var b = a.compile();
-		this.funcionFFT.push(b);
-//		console.log(b.eval({x:2.5}))
-		//b.eval({x:1}) //1
-		//b.eval({x:2}) //4
-		//b.eval({x:3}) //8
-	};
-
-	SignalDesign.prototype.functionParse = function(funcion){
-		this.fftAlgorithm(funcion);
-		var f = "";
-		var data = {};
-		var indexOfP = funcion.indexOf("+");
-		if(indexOfP > 0)
-			f = funcion.split("+");
-		var indexOfM = funcion.indexOf("-");
-		if(indexOfM > 0){
-			f = funcion.split("-");
-			for(var i = 1, ff; ff = f[i]; i++)
-				f[i] = "-"+f[i];
-		}
-		//TODO que pasa si suma y resta a la vez??
-
-		for(var i = 0, fun; fun = f[i]; i++){
-			if(fun.indexOf("x") > -1){
-				fun = fun.replace("x","");
-				fun = fun.replace("(","");
-				fun = this.functionFraction(fun);
-				data["l"] = parseFloat(fun,10);
-			} else {
-				fun = this.functionFraction(fun);
-				data["c"] = parseFloat(fun,10);
-			}
-		}
-		if(i == 0){
-			if(funcion.indexOf("x") > -1){
-				f = funcion.replace("x","");
-				f = this.functionFraction(f);
-				data["l"] = parseFloat(f,10);
-			} else {
-				f = this.functionFraction(funcion);
-				data["c"] = parseFloat(f,10);
-			}
-		}
-		return data;
-	};
+//	SignalDesign.prototype.functionParse = function(funcion){
+//		this.fftAlgorithm(funcion);
+//		var f = "";
+//		var data = {};
+//		var indexOfP = funcion.indexOf("+");
+//		if(indexOfP > 0)
+//			f = funcion.split("+");
+//		var indexOfM = funcion.indexOf("-");
+//		if(indexOfM > 0){
+//			f = funcion.split("-");
+//			for(var i = 1, ff; ff = f[i]; i++)
+//				f[i] = "-"+f[i];
+//		}
+//		//TODO que pasa si suma y resta a la vez??
+//
+//		for(var i = 0, fun; fun = f[i]; i++){
+//			if(fun.indexOf("x") > -1){
+//				fun = fun.replace("x","");
+//				fun = fun.replace("(","");
+//				fun = this.functionFraction(fun);
+//				data["l"] = parseFloat(fun,10);
+//			} else {
+//				fun = this.functionFraction(fun);
+//				data["c"] = parseFloat(fun,10);
+//			}
+//		}
+//		if(i == 0){
+//			if(funcion.indexOf("x") > -1){
+//				f = funcion.replace("x","");
+//				f = this.functionFraction(f);
+//				data["l"] = parseFloat(f,10);
+//			} else {
+//				f = this.functionFraction(funcion);
+//				data["c"] = parseFloat(f,10);
+//			}
+//		}
+//		return data;
+//	};
 
 
 	SignalDesign.prototype.ciclosFila = function(){
