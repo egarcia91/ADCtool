@@ -3,7 +3,7 @@
  * var b = a.compile();
  * b.eval({x:1}) //1
  * b.eval({x:2}) //4
- * b.eval({x:3}) //8
+ * b.eval({x:3}) //9
 */
 (function(){
 	function SignalDesign(div,config){
@@ -19,8 +19,9 @@
 	SignalDesign.prototype.thisChange = function(event,t,that){
 		var name = t.getAttribute('data-name');
 		switch(name){
-			case "function":
+			case "funcion":
 				//QUE HACEMOS
+				console.log("Modif la func");
 				return true;
 				break;
 			default:
@@ -74,122 +75,39 @@
 	SignalDesign.prototype.calculateSignal = function(nombre){
 		var data = {
 			nombre : nombre || "",
-			funcion : {}
+			funcion : []
 		};
 
 		this.getElementsByClassName("SignalDesignInfo",function(e){
-//			var name = e.getAttribute("data-name");
-//			var part = e.getAttribute("data-part");
-//			var func = data["funcion"][part];
-//			switch(name){
-//				case "hasta":
-//				case "desde":
-//					if(!func)
-//						func = {};
-//					func[name] = parseFloat(e.value,10);
-//					break;
-//				case "funcion":
-//					if(!func)
-//						func = {};
-//					if(!func[name]);
-//						func[name] = {};
-//					func[name] = this.functionParse(e.value);
-//					break;
-//				default:
-//					data[name] = parseInt(e.value,10);
-//					break;
-//			}
-//			data["funcionFFT"] = this.funcionFFT;
+			var dataFunction = {};
+			for(var i = 0, node; node = e.childNodes[i]; i++){
+				var name = node.getAttribute("data-name");
+				if(name == 'periodo' || name == 'nF'){
+					data[name] = parseFloat(node.value,10);
+				} else if(name == 'funcion'){
+					dataFunction[name] = this.functionParse2(node.value);
+				} else if(name) {
+					dataFunction[name] = parseFloat(node.value,10);
+				}
+			}
+			if(dataFunction['funcion']){
+				data['funcion'].push(dataFunction);
+			}
 		});
+		console.log(data);
 		//this.emit("creSignal",data);
 	};
 
-//	SignalDesign.prototype.resC = function(f){
-//		var res;
-//		if(isNaN(f)){
-//			if(this.isFraction(f)){
-//				res = eval(f);
-//				res = (res == undefined)? 0 : res;
-//			}
-//		} else { 
-//			res = eval(f);
-//			res = (res == undefined)? 0 : res;
-//		}
-//		return res;
-//	};
-
-//	SignalDesign.prototype.isFraction = function(funcion){
-//		funcion = funcion.replace(/\(/g,"");
-//		funcion = funcion.replace(/\)/g,"");
-//		if(funcion.indexOf("/") > 0){
-//			if(isNaN(funcion.split("/")[0])) return false;
-//			if(isNaN(funcion.split("/")[1])) return false;
-//		}
-//		return true;
-//	};
-
-//	SignalDesign.prototype.functionFraction = function(funcion){
-//		funcion = funcion.replace(/\(/g,"");
-//		funcion = funcion.replace(/\)/g,"");
-//		if(funcion.indexOf("/") > 0)
-//			funcion = parseInt(funcion.split("/")[0],10)/parseInt(funcion.split("/")[1],10);
-//		return funcion;
-//	};
-
-//	SignalDesign.prototype.fftAlgorithm = function(funcion){
-////		console.log(funcion);
-//		var a = math.parse(funcion,{x:0});
-//		var b = a.compile();
-//		this.funcionFFT.push(b);
-////		console.log(b.eval({x:2.5}))
-//		//b.eval({x:1}) //1
-//		//b.eval({x:2}) //4
-//		//b.eval({x:3}) //8
-//	};
-
-//	SignalDesign.prototype.functionParse = function(funcion){
-//		this.fftAlgorithm(funcion);
-//		var f = "";
-//		var data = {};
-//		var indexOfP = funcion.indexOf("+");
-//		if(indexOfP > 0)
-//			f = funcion.split("+");
-//		var indexOfM = funcion.indexOf("-");
-//		if(indexOfM > 0){
-//			f = funcion.split("-");
-//			for(var i = 1, ff; ff = f[i]; i++)
-//				f[i] = "-"+f[i];
-//		}
-//		//TODO que pasa si suma y resta a la vez??
-//
-//		for(var i = 0, fun; fun = f[i]; i++){
-//			if(fun.indexOf("x") > -1){
-//				fun = fun.replace("x","");
-//				fun = fun.replace("(","");
-//				fun = this.functionFraction(fun);
-//				data["l"] = parseFloat(fun,10);
-//			} else {
-//				fun = this.functionFraction(fun);
-//				data["c"] = parseFloat(fun,10);
-//			}
-//		}
-//		if(i == 0){
-//			if(funcion.indexOf("x") > -1){
-//				f = funcion.replace("x","");
-//				f = this.functionFraction(f);
-//				data["l"] = parseFloat(f,10);
-//			} else {
-//				f = this.functionFraction(funcion);
-//				data["c"] = parseFloat(f,10);
-//			}
-//		}
-//		return data;
-//	};
-
+	SignalDesign.prototype.functionParse2 = function(funcion){
+		var a = math.parse(funcion,{x:0});
+		var b = a.compile();
+		return b;
+	};
 
 	SignalDesign.prototype.ciclosFila = function(){
 
 		var ciclos = document.createElement("div");
+		ciclos.setAttribute("class","SignalDesignInfo");
 
 		var spanCiclos = document.createElement("span");
 
@@ -198,7 +116,6 @@
 		var inputCiclos = document.createElement("input");
 
 		inputCiclos.setAttribute("type","number");
-		inputCiclos.setAttribute("class","SignalDesignInfo");
 		inputCiclos.setAttribute("data-name","nF");
 		inputCiclos.setAttribute("value","150");
 		inputCiclos.setAttribute("min","1");
@@ -212,6 +129,7 @@
 
 	SignalDesign.prototype.periodoFila = function(){
 		var periodo = document.createElement("div");
+		periodo.setAttribute("class","SignalDesignInfo");
 
 		var spanPeriodo = document.createElement("span");
 
@@ -220,7 +138,6 @@
 		var inputPeriodo = document.createElement("input");
 
 		inputPeriodo.setAttribute("type","number");
-		inputPeriodo.setAttribute("class","SignalDesignInfo");
 		inputPeriodo.setAttribute("data-name","periodo");
 		inputPeriodo.setAttribute("value","10");
 		inputPeriodo.setAttribute("min","1");
@@ -239,21 +156,18 @@
 		span1Hasta.innerHTML = "Hasta";
 
 		var div1Funcion = document.createElement("div")
+		div1Funcion.setAttribute("class","SignalDesignInfo");
 
 		var inputdiv11Funcion = document.createElement("input");
 		inputdiv11Funcion.setAttribute("type","text");
-		inputdiv11Funcion.setAttribute("class","SignalDesignInfo");
 		inputdiv11Funcion.setAttribute("data-name","funcion");
-		inputdiv11Funcion.setAttribute("data-part","0");
 		inputdiv11Funcion.setAttribute("value",func);
 		div1Funcion.appendChild(inputdiv11Funcion);
 		div1Funcion.appendChild(span1Desde);
 
 		var inputdiv12Funcion = document.createElement("input");
 		inputdiv12Funcion.setAttribute("type","number");
-		inputdiv12Funcion.setAttribute("class","SignalDesignInfo");
 		inputdiv12Funcion.setAttribute("data-name","desde");
-		inputdiv12Funcion.setAttribute("data-part","0");
 		inputdiv12Funcion.setAttribute("value",desde);
 		inputdiv12Funcion.setAttribute("min","0");
 		inputdiv12Funcion.setAttribute("max","30");
@@ -263,9 +177,7 @@
 
 		var inputdiv13Funcion = document.createElement("input");
 		inputdiv13Funcion.setAttribute("type","number");
-		inputdiv13Funcion.setAttribute("class","SignalDesignInfo");
 		inputdiv13Funcion.setAttribute("data-name","hasta");
-		inputdiv13Funcion.setAttribute("data-part","0");
 		inputdiv13Funcion.setAttribute("value",hasta);
 		inputdiv13Funcion.setAttribute("min","0");
 		inputdiv13Funcion.setAttribute("max","30");
