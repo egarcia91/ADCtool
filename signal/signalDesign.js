@@ -59,15 +59,24 @@
 	SignalDesign.prototype.drawEditor = function(){
 
 		var template = document.createElement("div");
-		template.setAttribute("class","DivSignalDesignTemplate");
 
-		template.appendChild(this.ciclosFila());
+		var data = document.createElement("div");
+		data.setAttribute("class","DivSignalDesignTemplate");
 
-		template.appendChild(this.periodoFila());
+		data.appendChild(this.ciclosFila());
 
-		template.appendChild(this.funcionFila());
+		data.appendChild(this.periodoFila());
 
-		template.appendChild(this.botonesFila());
+		data.appendChild(this.funcionFila());
+
+		data.appendChild(this.botonesFila());
+
+		template.appendChild(data);
+
+		var canvasjs = document.createElement("div");
+		canvasjs.setAttribute("class","DivSignalDesignTemplate");
+		template.appendChild(canvasjs);
+
 
 		this.d.appendChild(template);
 	};

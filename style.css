@@ -37,6 +37,10 @@ body {
 	vertical-align:top;
 }
 
+.DivSignalDesignTemplate {
+	display: inline-block;
+}
+
 .editor,
 .tables {
 	width:90%;
