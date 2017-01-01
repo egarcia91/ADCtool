@@ -256,7 +256,7 @@
 
 
 	SignalDesign.prototype.showGrafic = function(){
-		var dataPoints = this.graficDataPoints(this.calculateSignal());
+		var dataPoints = window.Signal.graficDataPoints(this.calculateSignal());
 		var signalChart = new CanvasJS.Chart("SignalGrafic", {
 			data: [{
 				type: "line",
@@ -272,44 +272,6 @@
 			}
 		});
 		signalChart.render();
-	};
-
-	SignalDesign.prototype.graficDataPoints = function(data){
-		var t = math.fraction(0,1);
-		var fin = data.periodo;
-		var division = 512;
-		var paso = math.fraction(fin,division);
-		var dataPoints = [];
-
-		dataPoints.push({
-			x : 0,
-			y : 0
-		});
-
-		for(var j = 0; j < division; j++){
-			t = t.add(paso);
-			valueT = t.valueOf();
-
-			var hasPart = false;
-			for(var i = 0, parte; parte = data['funcion'][i]; i++){
-				if(valueT >= parte.desde && valueT < parte.hasta){
-					dataPoints.push({
-						x : valueT,
-						y : parte.funcion.eval({x:valueT})
-					});
-					hasPart = true;
-					break;
-				}
-			}
-			if(!hasPart){
-				dataPoints.push({
-					x : valueT,
-					y : 0
-				});
-			}
-		}
-
-		return dataPoints;
 	};
 
 	window.SignalDesign = SignalDesign;

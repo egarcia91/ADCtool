@@ -14,11 +14,11 @@
 		var evt = t.getAttribute('data-evt');
 		switch(evt){
 
-			case "idealSignal":
-				t.style = "display:none";
-				this.idealSignal(t.getAttribute("data-name"));
-				return true;
-				break;
+//			case "idealSignal":
+//				t.style = "display:none";
+//				this.idealSignal(t.getAttribute("data-name"));
+//				return true;
+//				break;
 
 			case "newSignal":
 				this.onNewSignalClick();
@@ -33,10 +33,10 @@
 				return true;
 				break;
 
-			case "viewSignal":
-				this.viewSignal(t.getAttribute("data-name"));
-				return true;
-				break;
+//			case "viewSignal":
+//				this.viewSignal(t.getAttribute("data-name"));
+//				return true;
+//				break;
 
 			default:
 				return true;
@@ -93,14 +93,7 @@
 	};
 
 	SignalManager.prototype.onCalc = function(data){
-		console.log(data);
-//		var index = this.c.signals.push(new Signal(null,data));
-//		this.c.signals[index-1].getDiscretValues(confGeneral);
-//		this.c.signals[index-1].calcFFT();
-//		this.c.signals[index-1].getValues(confGeneral);
-
-////		this.c.signals[index-1].calcAnBn();
-////		this.c.signals[index-1].frecAmp();
+		this.c.signals.push(new Signal(null,data));
 
 		this.drawTable();
 	};
