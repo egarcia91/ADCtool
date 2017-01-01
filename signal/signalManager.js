@@ -33,10 +33,10 @@
 				return true;
 				break;
 
-//			case "viewSignal":
-//				this.viewSignal(t.getAttribute("data-name"));
-//				return true;
-//				break;
+			case "viewSignal":
+				this.onViewSignalClick(t.getAttribute("data-name"));
+				return true;
+				break;
 
 			default:
 				return true;
@@ -53,43 +53,52 @@
 		this.SigDesign.addEventListener("creSignal",this.onCalc.bind(this));
 	};
 
-	SignalManager.prototype.onSignalInCanvasClick = function(index,i,y,x){
-		this.c.signals[index].frecAddRm(i);
-		this.c.signals[index].getValues(confGeneral);
-		this.c.signals[index].draw(this.getElementsByClassName("MainCanvasSignalOut")[0],"blue");
-		this.c.signals[index].drawFrecDiag(this.getElementsByClassName("MainCanvasOutFFT")[0],"blue");
-	};
+//	SignalManager.prototype.onSignalInCanvasClick = function(index,i,y,x){
+//		this.c.signals[index].frecAddRm(i);
+//		this.c.signals[index].getValues(confGeneral);
+//		this.c.signals[index].draw(this.getElementsByClassName("MainCanvasSignalOut")[0],"blue");
+//		this.c.signals[index].drawFrecDiag(this.getElementsByClassName("MainCanvasOutFFT")[0],"blue");
+//	};
+//
+//	SignalManager.prototype.onSignalOutCanvasClickFase = function(index,i,ang){
+//		this.c.signals[index].setFase(i,ang);
+//		this.c.signals[index].getValues(confGeneral);
+//		this.c.signals[index].draw(this.getElementsByClassName("MainCanvasSignalOut")[0],"blue");
+//		this.c.signals[index].drawFrecDiag(this.getElementsByClassName("MainCanvasOutFFT")[0],"blue");
+//	};
+//
+//	SignalManager.prototype.onSignalOutCanvasClick = function(index,i,y,x){
+//		this.c.signals[index].ampMultiply(i,y,x);
+//		this.c.signals[index].getValues(confGeneral);
+//		this.c.signals[index].draw(this.getElementsByClassName("MainCanvasSignalOut")[0],"blue");
+//		this.c.signals[index].drawFrecDiag(this.getElementsByClassName("MainCanvasOutFFT")[0],"blue");
+//	};
 
-	SignalManager.prototype.onSignalOutCanvasClickFase = function(index,i,ang){
-		this.c.signals[index].setFase(i,ang);
-		this.c.signals[index].getValues(confGeneral);
-		this.c.signals[index].draw(this.getElementsByClassName("MainCanvasSignalOut")[0],"blue");
-		this.c.signals[index].drawFrecDiag(this.getElementsByClassName("MainCanvasOutFFT")[0],"blue");
-	};
+//	SignalManager.prototype.idealSignal = function(i){
+//		var index = this.c.signals.push(new Signal(null,this.c.signals[i].exportSignal()));
+//		this.c.signals[i].addEventListener("clickCanvas", this.onSignalInCanvasClick.bind(this,index-1));
+//		this.c.signals[index-1].setNombre(this.c.signals[i].nombre+" salida ideal");
+//		this.c.signals[index-1].removeAllFrec();
+//		this.c.signals[index-1].getValues(confGeneral);
+//		this.c.signals[index-1].firstdraw(this.getElementsByClassName("MainCanvasSignalOut")[0],"blue");
+//		this.c.signals[index-1].firstdrawFrecDiag(this.getElementsByClassName("MainCanvasOutFFT")[0],"blue");
+//		this.c.signals[index-1].addEventListener("clickCanvas", this.onSignalOutCanvasClick.bind(this,index-1));
+//		this.c.signals[index-1].addEventListener("clickCirculoCanvas", this.onSignalOutCanvasClickFase.bind(this,index-1));
+//	};
 
-	SignalManager.prototype.onSignalOutCanvasClick = function(index,i,y,x){
-		this.c.signals[index].ampMultiply(i,y,x);
-		this.c.signals[index].getValues(confGeneral);
-		this.c.signals[index].draw(this.getElementsByClassName("MainCanvasSignalOut")[0],"blue");
-		this.c.signals[index].drawFrecDiag(this.getElementsByClassName("MainCanvasOutFFT")[0],"blue");
-	};
+	SignalManager.prototype.onViewSignalClick = function(i){
 
-	SignalManager.prototype.idealSignal = function(i){
-		var index = this.c.signals.push(new Signal(null,this.c.signals[i].exportSignal()));
-		this.c.signals[i].addEventListener("clickCanvas", this.onSignalInCanvasClick.bind(this,index-1));
-		this.c.signals[index-1].setNombre(this.c.signals[i].nombre+" salida ideal");
-		this.c.signals[index-1].removeAllFrec();
-		this.c.signals[index-1].getValues(confGeneral);
-		this.c.signals[index-1].firstdraw(this.getElementsByClassName("MainCanvasSignalOut")[0],"blue");
-		this.c.signals[index-1].firstdrawFrecDiag(this.getElementsByClassName("MainCanvasOutFFT")[0],"blue");
-		this.c.signals[index-1].addEventListener("clickCanvas", this.onSignalOutCanvasClick.bind(this,index-1));
-		this.c.signals[index-1].addEventListener("clickCirculoCanvas", this.onSignalOutCanvasClickFase.bind(this,index-1));
-	};
+		this.clean();
+		this.getElementsByClassName("tables")[0].appendChild(this.drawHeader());
 
-	SignalManager.prototype.viewSignal = function(i){
-		this.readyToDraw(i);
-		this.c.signals[i].firstdraw(this.getElementsByClassName("MainCanvasSignal")[0],"red");
-		this.c.signals[i].firstdrawFrecDiag(this.getElementsByClassName("MainCanvasInFFT")[0],"red");
+		var sig = this.c.signals[i];
+		this.SigView = new SignalView(this.getElementsByClassName("editor")[0],{
+			signal : sig
+		});
+
+//		this.readyToDraw(i);
+//		this.c.signals[i].firstdraw(this.getElementsByClassName("MainCanvasSignal")[0],"red");
+//		this.c.signals[i].firstdrawFrecDiag(this.getElementsByClassName("MainCanvasInFFT")[0],"red");
 	};
 
 	SignalManager.prototype.onCalc = function(data){

@@ -9,12 +9,11 @@
 	function SignalDesign(div,config){
 		HtmlWidget.call(this,div,config);
 		this.drawEditor();
-		this.showGrafic();
+		window.SignalView.showGrafic(this.calculateSignal(),"SignalGrafic");
 	}
 
 	SignalDesign.prototype = Object.create(HtmlWidget.prototype);
 	SignalDesign.prototype.constructor = "SignalDesign";
-	SignalDesign.prototype.funcionFFT = [];
 	SignalDesign.prototype.elementPartesFuncion = undefined;
 
 	SignalDesign.prototype.thisChange = function(event,t,that){
@@ -24,7 +23,7 @@
 			case "desde":
 			case "hasta":
 			case "periodo":
-				this.showGrafic();
+				window.SignalView.showGrafic(this.calculateSignal(),"SignalGrafic");
 				return true;
 				break;
 			default:
@@ -252,26 +251,6 @@
 		this.elementPartesFuncion = partesFuncion;
 
 		return funcion;
-	};
-
-
-	SignalDesign.prototype.showGrafic = function(){
-		var dataPoints = window.Signal.graficDataPoints(this.calculateSignal());
-		var signalChart = new CanvasJS.Chart("SignalGrafic", {
-			data: [{
-				type: "line",
-				dataPoints: dataPoints
-			}],
-			axisX: {
-				tickThickness: 0
-			},
-			axisY: {
-				maximum: 1,
-				minimum: -1,
-				tickThickness: 0
-			}
-		});
-		signalChart.render();
 	};
 
 	window.SignalDesign = SignalDesign;
