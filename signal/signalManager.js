@@ -28,7 +28,7 @@
 			case "calculateSignal":
 
 				var nombre = this.getElementsByClassName("SignalDesignInfo")[0].value;
-				this.SigDesign.calculateSignal(nombre);
+				this.SigDesign.sendSignal(nombre);
 
 				return true;
 				break;

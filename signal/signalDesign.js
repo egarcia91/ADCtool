@@ -39,7 +39,7 @@
 		switch(evt){
 
 			case "calculateSignal":
-				this.calculateSignal();
+				this.sendSignal();
 				return true;
 				break;
 
@@ -66,7 +66,8 @@
 		var data = document.createElement("div");
 		data.classList.add("DivSignalDesignTemplate");
 
-		data.appendChild(this.ciclosFila());
+		//Despues vemos si volvemos a usar la transformada a manopla
+		//data.appendChild(this.ciclosFila());
 
 		data.appendChild(this.periodoFila());
 
@@ -83,6 +84,10 @@
 
 
 		this.d.appendChild(template);
+	};
+
+	SignalDesign.prototype.sendSignal = function(nombre){
+		this.emit("creSignal",this.calculateSignal(nombre));
 	};
 
 	SignalDesign.prototype.calculateSignal = function(nombre){
@@ -108,7 +113,6 @@
 			}
 		});
 		return data;
-		//this.emit("creSignal",data);
 	};
 
 	SignalDesign.prototype.functionParse2 = function(funcion){
